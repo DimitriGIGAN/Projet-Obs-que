@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="fr-FR">
+
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="obsq.css" />
+    <!--[if IE]>
+      <link rel="stylesheet" type="text/css" href="ie.css" />
+      <![endif]-->
+    <link rel="shortcut icon" href="images/ums.ico" />
+    <title>Fichier Obseques - Authentification</title>
+    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  </head>
+
+        <body>
+
+                <header>
+                        <div>
+                                <a href='index.php'><img src='images/UMS1.png' alt='logo UMS'/></a>
+                                <h1>FICHIER OBSEQUES</h1>
+                        </div>
+                </header>
+
+                <div id='connexion'>
+                         <form method="post" action="ldap.php" name="Authentification">
+
+                                <h2 class="titre">IDENTIFICATION</h2>
+
+                                <div>
+                                        <label>Nom utilisateur :</label>
+                                        <input maxlength="40" name="CR_usr"  class='' autofocus/>
+                                </div>
+                                <div>
+                                        <label>Mot de passe :</label>
+                                        <input type="password" maxlength="40" name="CR_pwd" class='' />
+
+                                </div>
+                               
+                                <div>
+                    
+                                            <!-- Champ anti-robot -->
+                                              <div style="display:none">
+                                                <label>Ne pas remplir ce champ :</label>
+                                                <input type="text" name="honey_pot" />
+                                              </div>
+
+                <button type='submit' id='btnConnexion' class='valide' onclick="return checkHoneyPot() &&showMathQuestion()">Se connecter</button>
+        </form>
+      </div>
+      <p>Site développé par le service Informatique de l'UMS </p>
+      <footer>
+        <div>
+          <p><a href="mentions_legales.html">Mentions légales</a></p>
+        </div>
+      </footer>
+    
+       <script>
+        var maxAttempts = 5;
+        var delayInSeconds = 120;
+        var attempts = 0;
+        var lastAttemptTime = 0;
+    
+        function showMathQuestion() {
+          var currentTime = new Date().getTime() / 1000; // Convertir en secondes
+    
+          // Vérifier si le délai d'attente est écoulé
+          // if (currentTime - lastAttemptTime < delayInSeconds) {
+          //   alert("Veuillez patienter quelques instants avant de réessayer.");
+          //   return false;
+          // }
+    
+          var answer = prompt("Quel est le digiCode de l'UMS ? "); 
+          var code = "#1975"
+    
+          if (answer === code) {
+            // Réponse correcte, réinitialiser les tentatives et le temps
+            attempts = 0;
+            lastAttemptTime = 0;
+            return true;
+          } else {
+            // Réponse incorrecte, incrémenter le nombre de tentatives et enregistrer le temps de la dernière tentative
+            attempts++;
+            lastAttemptTime = currentTime;
+    
+            if (attempts >= maxAttempts) {
+              // Nombre maximal de tentatives atteint, afficher un message d'erreur
+              alert("Vous avez dépassé le nombre maximal de tentatives. Veuillez attendre quelques instants secondes avant de réessayer.");
+              return false;
+            } else {
+              // Nombre de tentatives restantes, afficher un message d'erreur
+              alert("La réponse est incorrecte. Il vous reste " + (maxAttempts - attempts) + " tentatives.");
+              return false;
+            }
+          }
+        }
+        function checkHoneyPot() {
+      if (document.getElementsByName("honey_pot")[0].value !== "") {
+        // Le champ honey pot a été rempli, il s'agit probablement d'un robot
+        alert("Erreur : Veuillez remplir correctement le formulaire.");
+        return false;
+      } else {
+        // Le champ honey pot est vide, continuer le processus d'authentification
+        return true;
+      }
+    }
+      </script>
+    </body>
+    
+    </html>
+
+</html>
